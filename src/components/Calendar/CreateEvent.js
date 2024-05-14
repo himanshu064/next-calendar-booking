@@ -84,9 +84,10 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
       }
     >
       <form
-        onSubmit={() => {
-          alert("Submit");
-        }}
+        // onSubmit={() => {
+        //   alert("Submit");
+        // }}
+        onSubmit={handleSubmit}
         ref={formRef}
       >
         <Grid container spacing={1}>

@@ -178,14 +178,18 @@ function Calendar() {
     console.log(calendarApi, "calendarApi");
     // let title = prompt("Please enter a new title for your event");
 
-
     const dates = [];
     if (selectInfo.startStr) {
       dates.push(dayjs(selectInfo.startStr));
     }
 
     if (selectInfo.endStr) {
-      dates.push(dayjs(selectInfo.endStr).subtract(1, "minute"));
+      let endDateStr = dayjs(selectInfo.endStr);
+      // in case of month view, subtract 1 minute from the end date, so that end date is not included
+      if (selectInfo.view.type === "dayGridMonth") {
+        endDateStr = endDateStr.subtract(1, "minute");
+      }
+      dates.push(endDateStr);
     } else {
       dates.push(dayjs(selectInfo.endStr).add(1, "hour"));
     }
