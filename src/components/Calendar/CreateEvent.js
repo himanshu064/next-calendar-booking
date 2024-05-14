@@ -94,6 +94,7 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
             <FormControl fullWidth>
               <FormLabel>Title</FormLabel>
               <TextField
+                autoFocus
                 placeholder="Add title"
                 value={eventTitle}
                 onChange={(e) => setEventTitle(e.target.value)}

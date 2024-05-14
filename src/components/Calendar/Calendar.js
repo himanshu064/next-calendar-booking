@@ -146,19 +146,54 @@ function Calendar() {
 
     // calendarApi.unselect(); // clear date selection
     const dates = [];
-    if (selectInfo.startStr) {
-      dates.push(dayjs(selectInfo.startStr));
+    if (selectInfo.dateStr) {
+      dates.push(dayjs(selectInfo.dateStr));
     }
 
     if (selectInfo.endStr) {
       dates.push(dayjs(selectInfo.endStr));
     } else {
-      dates.push(dayjs(selectInfo.startStr));
+      dates.push(dayjs(selectInfo.dateStr).add(1, "hour"));
     }
 
     console.log(dates, "dates dates dates");
 
     setSelectedDates(dates);
+    setOpenCreateEvent(true);
+
+    // if (title) {
+    //   calendarApi.addEvent({
+    //     id: createEventId(),
+    //     title,
+    //     start: selectInfo.startStr,
+    //     end: selectInfo.endStr,
+    //     allDay: selectInfo.allDay,
+    //   });
+    // }
+  };
+
+  const handleDateSelect = (selectInfo) => {
+    console.log(selectInfo, "selectInfo");
+    const calendarApi = selectInfo.view.calendar;
+    console.log(calendarApi, "calendarApi");
+    // let title = prompt("Please enter a new title for your event");
+
+
+    const dates = [];
+    if (selectInfo.startStr) {
+      dates.push(dayjs(selectInfo.startStr));
+    }
+
+    if (selectInfo.endStr) {
+      dates.push(dayjs(selectInfo.endStr).subtract(1, "minute"));
+    } else {
+      dates.push(dayjs(selectInfo.endStr).add(1, "hour"));
+    }
+
+    console.log(dates, "dates dates dates");
+
+    setSelectedDates(dates);
+    calendarApi.unselect(); // clear date selection
     setOpenCreateEvent(true);
 
     // if (title) {
@@ -205,7 +240,7 @@ function Calendar() {
         // views={VIEWS}
         // When a date is clicked
         selectable
-        select={() => console.log("Selected")}
+        select={handleDateSelect}
         dateClick={handleDateClick}
       />
 
