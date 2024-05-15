@@ -203,8 +203,6 @@ const timezones = [
   "(GMT+03:00) Eastern European Time - Hebron",
   "(GMT+03:00) Eastern European Time - Helsinki",
   "(GMT+03:00) Eastern European Time - Kyiv",
-  "(GMT+03:00) Eastern European Time - Kyiv",
-  "(GMT+03:00) Eastern European Time - Kyiv",
   "(GMT+03:00) Eastern European Time - Nicosia",
   "(GMT+03:00) Eastern European Time - Riga",
   "(GMT+03:00) Eastern European Time - Sofia",

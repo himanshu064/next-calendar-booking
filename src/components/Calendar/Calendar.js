@@ -40,7 +40,6 @@ const events = [{ title: "Meeting", start: new Date() }];
 
 function Calendar() {
   const fullCalendarRef = useRef(null);
-  console.log(fullCalendarRef, "fullCalendarRef fullCalendarRef");
 
   const [openCreateEvent, setOpenCreateEvent] = useState(false);
   const [selectedDates, setSelectedDates] = useState([]);
