@@ -9,12 +9,15 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Box,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { MobileDateTimePicker } from "@mui/x-date-pickers";
 import { KeyboardBackspace } from "@mui/icons-material";
+import Circle from "@uiw/react-color-circle";
 import timezones, { extractTimezoneOffsets } from "./timezones";
 import { getBrowserTimezone, getBrowserTimezoneOffset } from "./helper";
+import { COLORS_SWATCH } from "./utils";
 
 const browserTimezoneOffset = {
   id: "browser",
@@ -23,6 +26,8 @@ const browserTimezoneOffset = {
 };
 
 const browserTimezone = getBrowserTimezone();
+
+const colorCodes = COLORS_SWATCH.map((color) => color.code);
 
 const CreateEvent = ({
   open,
@@ -36,6 +41,7 @@ const CreateEvent = ({
   const [eventType, setEventType] = React.useState("single");
   const [fromDate, setFromDate] = React.useState(null);
   const [toDate, setToDate] = React.useState(null);
+  const [eventColor, setEventColor] = React.useState(colorCodes[0]);
 
   useEffect(() => {
     if (defaultValues) {
@@ -57,6 +63,7 @@ const CreateEvent = ({
       eventType,
       fromDate,
       toDate,
+      eventColor,
     });
   };
 
@@ -169,6 +176,38 @@ const CreateEvent = ({
             </FormControl>
           </Grid>
         </Grid>
+        <Grid xs={12}>
+          <FormControl fullWidth sx={{ marginTop: 2 }}>
+            <FormLabel>Color</FormLabel>
+            <Box
+              sx={{
+                marginTop: 1,
+                background: "#efefef",
+                display: "flex",
+                padding: 1,
+                alignItems: "center",
+                borderBottom: `2px solid ${eventColor}`,
+              }}
+            >
+              <Circle
+                colors={colorCodes}
+                color={eventColor}
+                onChange={(color) => {
+                  setEventColor(color.hex);
+                }}
+                pointProps={{
+                  style: {
+                    height: "20px",
+                    width: "20px",
+                    marginRight: "8px",
+                    padding: 0,
+                  },
+                }}
+              />
+            </Box>
+          </FormControl>
+        </Grid>
+
         {/* Hidden submit button to ensure Enter key works */}
         <button type="submit" style={{ display: "none" }} />
       </form>

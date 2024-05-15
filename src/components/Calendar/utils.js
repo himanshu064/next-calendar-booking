@@ -65,3 +65,17 @@ export const VIEWS = {
 };
 
 export const defaultIntervalInMinutes = 60;
+
+export const COLORS_SWATCH = [
+  { name: "Peacock", code: "#039BE5" },
+  { name: "Tomato", code: "#D50000" },
+  { name: "Flamingo", code: "#E67C73" },
+  { name: "Tangerine", code: "#F4511E" },
+  { name: "Banana", code: "#F6BF26" },
+  { name: "Sage", code: "#33B679" },
+  { name: "Basil", code: "#0B8043" },
+  { name: "Blueberry", code: "#3F51B5" },
+  { name: "Lavender", code: "#7986CB" },
+  { name: "Grape", code: "#8E24AA" },
+  { name: "Graphite", code: "#616161" },
+];

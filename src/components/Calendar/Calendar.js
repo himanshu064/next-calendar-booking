@@ -11,6 +11,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DateIcon from "@/icons/DayIcon";
 import {
   BUTTON_TEXT,
+  COLORS_SWATCH,
   HEADER_TOOLBAR,
   INITIAL_VIEW,
   PLUGINS,
@@ -21,24 +22,18 @@ import useImageButton from "./hooks/useImageButton";
 import useIconButton from "./hooks/useIconButton";
 import CreateEvent from "./CreateEvent";
 import { createId } from "./helper";
+import renderEventContent from "./methods/renderEventContent";
 
-// a custom render function
-function renderEventContent(eventInfo) {
-  const eventTime = eventInfo.event.start;
-  const formattedTime = eventTime.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-  return (
-    <>
-      <b>{formattedTime}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
-  );
-}
-
-const events = [{ title: "Meeting", start: new Date() }];
+const events = [
+  {
+    title: "Meeting",
+    start: new Date(),
+    end: dayjs(new Date()).add(2, "hours").toDate(),
+    editable: true,
+    color: "red",
+    textColor: "white",
+  },
+];
 
 function Calendar() {
   const fullCalendarRef = useRef(null);
@@ -176,11 +171,7 @@ function Calendar() {
   };
 
   const handleDateSelect = (selectInfo) => {
-    console.log(selectInfo, "selectInfo");
     const calendarApi = selectInfo.view.calendar;
-    console.log(calendarApi, "calendarApi");
-    // let title = prompt("Please enter a new title for your event");
-
     const dates = [];
     if (selectInfo.startStr) {
       dates.push(dayjs(selectInfo.startStr));
@@ -202,7 +193,7 @@ function Calendar() {
     console.log(dates, "dates dates dates");
 
     setSelectedDates(dates);
-    calendarApi.unselect(); // clear date selection
+    // calendarApi.unselect(); // clear date selection
     setOpenCreateEvent(true);
 
     // if (title) {
@@ -222,27 +213,15 @@ function Calendar() {
     eventType,
     fromDate,
     toDate,
+    eventColor,
   }) => {
-    console.log(
-      fullCalendarRef.current?.calendar,
-      "fullCalendarRef.current?.calendar"
-    );
-    console.log(
-      {
-        id: createId(),
-        title: eventTitle,
-        start: fromDate.toDate(),
-        end: toDate.toDate(),
-        allDay: eventType === "recurring",
-      },
-      "event object"
-    );
     fullCalendarRef.current?.calendar?.addEvent({
       id: createId(),
       title: eventTitle,
       start: fromDate.toDate(),
       end: toDate.toDate(),
       allDay: eventType === "recurring",
+      color: eventColor,
     });
     setOpenCreateEvent(false);
   };
@@ -280,8 +259,11 @@ function Calendar() {
         // views={VIEWS}
         // When a date is clicked
         selectable
+        // when selection is been made time appears
+        selectMirror
         select={handleDateSelect}
         dateClick={handleDateClick}
+        eventColor={COLORS_SWATCH[0].code}
       />
 
       <CreateEvent
