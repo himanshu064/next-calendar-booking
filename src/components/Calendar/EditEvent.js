@@ -19,21 +19,13 @@ import timezones, { extractTimezoneOffsets } from "./timezones";
 import { getBrowserTimezone, getBrowserTimezoneOffset } from "./helper";
 import { COLORS_SWATCH } from "./utils";
 
-const browserTimezoneOffset = {
-  id: "browser",
-  label: "Browser",
-  offset: getBrowserTimezoneOffset(),
-};
-
-const browserTimezone = getBrowserTimezone();
-
 const colorCodes = COLORS_SWATCH.map((color) => color.code);
 
-const CreateEvent = ({
+const EditEvent = ({
   open,
   setOpen,
+  defaultValues = {},
   onCreateEvent = () => {},
-  defaultValues,
 }) => {
   const formRef = React.useRef(null);
   const [eventTitle, setEventTitle] = React.useState("");
@@ -45,7 +37,10 @@ const CreateEvent = ({
 
   useEffect(() => {
     if (defaultValues) {
-      const { eventType, fromDate, toDate } = defaultValues;
+      const { eventTitle, timezone, eventType, fromDate, toDate } =
+        defaultValues;
+      setEventTitle(eventTitle);
+      setTimezone(timezone);
       setEventType(eventType);
       setFromDate(fromDate);
       setToDate(toDate);
@@ -212,4 +207,4 @@ const CreateEvent = ({
   );
 };
 
-export default CreateEvent;
+export default EditEvent;

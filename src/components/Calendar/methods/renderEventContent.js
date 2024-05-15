@@ -1,7 +1,10 @@
+import { Box, Stack } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 // a custom render function
 function renderEventContent(eventInfo) {
   const startTime = eventInfo.event.start;
   const endTime = eventInfo.event.end;
+  const props = eventInfo.event.extendedProps;
   const formattedStartTime = startTime.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
@@ -19,14 +22,19 @@ function renderEventContent(eventInfo) {
   }
 
   return (
-    <>
-      <b className="text-xs font-semibold">
-        {formattedStartTime}
-        {`${formattedEndTime ? " - " + formattedEndTime : ""}`}
-      </b>
-      <br />
-      <i>{eventInfo.event.title}</i>
-    </>
+    <Stack flexDirection="row" justifyContent="space-between">
+      <Box>
+        <b className="text-xs font-semibold">
+          {formattedStartTime}
+          {`${formattedEndTime ? " - " + formattedEndTime : ""}`}
+        </b>
+        <br />
+        <i>{eventInfo.event.title}</i>
+      </Box>
+      {props?.editable && (
+        <EditIcon sx={{ cursor: "pointer", fontSize: "18px" }} />
+      )}
+    </Stack>
   );
 }
 

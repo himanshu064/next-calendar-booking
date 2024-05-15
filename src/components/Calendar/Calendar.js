@@ -23,22 +23,18 @@ import useIconButton from "./hooks/useIconButton";
 import CreateEvent from "./CreateEvent";
 import { createId } from "./helper";
 import renderEventContent from "./methods/renderEventContent";
-
-const events = [
-  {
-    title: "Meeting",
-    start: new Date(),
-    end: dayjs(new Date()).add(2, "hours").toDate(),
-    editable: true,
-    color: "red",
-    textColor: "white",
-  },
-];
+import { useEventContext } from "@/context";
+import EditEvent from "./EditEvent";
+import { setLocalStorage } from "@/lib/localStorage";
 
 function Calendar() {
+  const { events } = useEventContext();
   const fullCalendarRef = useRef(null);
+  const [currentEvents, setCurrentEvents] = useState([]);
 
   const [openCreateEvent, setOpenCreateEvent] = useState(false);
+  const [openEditEvent, setOpenEditEvent] = useState(false);
+
   const [selectedDates, setSelectedDates] = useState([]);
 
   const goToToday = () => fullCalendarRef.current?.calendar?.today?.();
@@ -172,6 +168,7 @@ function Calendar() {
 
   const handleDateSelect = (selectInfo) => {
     const calendarApi = selectInfo.view.calendar;
+    console.log(selectInfo, "selectInfo selectInfo");
     const dates = [];
     if (selectInfo.startStr) {
       dates.push(dayjs(selectInfo.startStr));
@@ -215,26 +212,64 @@ function Calendar() {
     toDate,
     eventColor,
   }) => {
+    const id = createId();
     fullCalendarRef.current?.calendar?.addEvent({
-      id: createId(),
+      id,
       title: eventTitle,
       start: fromDate.toDate(),
       end: toDate.toDate(),
       allDay: eventType === "recurring",
       color: eventColor,
+      extendedProps: {
+        // timezone,
+        id,
+        editable: false,
+      },
+    });
+    setOpenCreateEvent(false);
+  };
+
+  const handleEditEvent = ({
+    eventTitle,
+    timezone,
+    eventType,
+    fromDate,
+    toDate,
+    eventColor,
+  }) => {
+    const id = createId();
+    fullCalendarRef.current?.calendar?.addEvent({
+      id,
+      title: eventTitle,
+      start: fromDate.toDate(),
+      end: toDate.toDate(),
+      allDay: eventType === "recurring",
+      color: eventColor,
+      extendedProps: {
+        // timezone,
+        id,
+        editable: false,
+      },
     });
     setOpenCreateEvent(false);
   };
 
   const defaultAddEventValues = useMemo(() => {
     return {
-      title: "",
-      timezone: "",
       eventType: "single",
       fromDate: selectedDates[0],
       toDate: selectedDates[1],
     };
   }, [selectedDates]);
+
+  function handleEvents(events) {
+    if (events.length > 0) {
+      setLocalStorage("events", events);
+    }
+    setCurrentEvents(events);
+  }
+
+  console.log(currentEvents, "currentEvents");
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -259,19 +294,33 @@ function Calendar() {
         // views={VIEWS}
         // When a date is clicked
         selectable
+        // to disable the dragging after event is created
+        eventStartEditable={false}
         // when selection is been made time appears
         selectMirror
         select={handleDateSelect}
         dateClick={handleDateClick}
         eventColor={COLORS_SWATCH[0].code}
+        editable
+        eventClick={(info) => console.log(info, "info asadsad")}
+        // called after events are initialized/added/changed/removed
+        eventsSet={handleEvents}
       />
 
       <CreateEvent
-        key={openCreateEvent ? "open" : "close"}
+        key={openCreateEvent ? "open-create" : "close-create"}
         open={openCreateEvent}
         setOpen={setOpenCreateEvent}
         defaultValues={defaultAddEventValues}
         onCreateEvent={handleCreateEvent}
+      />
+
+      <EditEvent
+        key={openEditEvent ? "open-edit" : "close-edit"}
+        open={openEditEvent}
+        setOpen={setOpenEditEvent}
+        defaultValues={defaultAddEventValues}
+        onEditEvent={handleEditEvent}
       />
     </LocalizationProvider>
   );
