@@ -1,5 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 // a custom render function
 function renderEventContent(eventInfo) {
   const startTime = eventInfo.event.start;
@@ -31,9 +32,14 @@ function renderEventContent(eventInfo) {
         <br />
         <i>{eventInfo.event.title}</i>
       </Box>
-      {props?.editable && (
-        <EditIcon sx={{ cursor: "pointer", fontSize: "18px" }} />
-      )}
+      <Box>
+        {props?.editable && (
+          <EditIcon
+            sx={{ cursor: "pointer", fontSize: "18px", marginRight: "4px" }}
+          />
+        )}
+        <DeleteIcon sx={{ cursor: "pointer", fontSize: "18px" }} />
+      </Box>
     </Stack>
   );
 }
