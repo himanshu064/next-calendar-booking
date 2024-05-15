@@ -91,8 +91,6 @@ const timezones = [
   "(GMT-04:00) Eastern Time - Petersburg, Indiana",
   "(GMT-04:00) Eastern Time - Port-au-Prince",
   "(GMT-04:00) Eastern Time - Toronto",
-  "(GMT-04:00) Eastern Time - Toronto",
-  "(GMT-04:00) Eastern Time - Toronto",
   "(GMT-04:00) Eastern Time - Vevay, Indiana",
   "(GMT-04:00) Eastern Time - Vincennes, Indiana",
   "(GMT-04:00) Eastern Time - Winamac, Indiana",
@@ -341,3 +339,13 @@ const timezones = [
 ];
 
 export default timezones;
+
+export function extractTimezoneOffsets(timezone) {
+  const regex = /\(GMT([+-]\d{2}:\d{2})\)/;
+
+  const match = timezone.match(regex);
+  if (match) {
+    return match[1];
+  }
+  return null;
+}

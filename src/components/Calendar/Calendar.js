@@ -15,10 +15,12 @@ import {
   INITIAL_VIEW,
   PLUGINS,
   VIEWS,
+  defaultIntervalInMinutes,
 } from "./utils";
 import useImageButton from "./hooks/useImageButton";
 import useIconButton from "./hooks/useIconButton";
 import CreateEvent from "./CreateEvent";
+import { createId } from "./helper";
 
 // a custom render function
 function renderEventContent(eventInfo) {
@@ -152,7 +154,9 @@ function Calendar() {
     if (selectInfo.endStr) {
       dates.push(dayjs(selectInfo.endStr));
     } else {
-      dates.push(dayjs(selectInfo.dateStr).add(1, "hour"));
+      dates.push(
+        dayjs(selectInfo.dateStr).add(defaultIntervalInMinutes, "minutes")
+      );
     }
 
     console.log(dates, "dates dates dates");
@@ -190,7 +194,9 @@ function Calendar() {
       }
       dates.push(endDateStr);
     } else {
-      dates.push(dayjs(selectInfo.endStr).add(1, "hour"));
+      dates.push(
+        dayjs(selectInfo.endStr).add(defaultIntervalInMinutes, "minutes")
+      );
     }
 
     console.log(dates, "dates dates dates");
@@ -208,6 +214,37 @@ function Calendar() {
     //     allDay: selectInfo.allDay,
     //   });
     // }
+  };
+
+  const handleCreateEvent = ({
+    eventTitle,
+    timezone,
+    eventType,
+    fromDate,
+    toDate,
+  }) => {
+    console.log(
+      fullCalendarRef.current?.calendar,
+      "fullCalendarRef.current?.calendar"
+    );
+    console.log(
+      {
+        id: createId(),
+        title: eventTitle,
+        start: fromDate.toDate(),
+        end: toDate.toDate(),
+        allDay: eventType === "recurring",
+      },
+      "event object"
+    );
+    fullCalendarRef.current?.calendar?.addEvent({
+      id: createId(),
+      title: eventTitle,
+      start: fromDate.toDate(),
+      end: toDate.toDate(),
+      allDay: eventType === "recurring",
+    });
+    setOpenCreateEvent(false);
   };
 
   const defaultAddEventValues = useMemo(() => {
@@ -252,6 +289,7 @@ function Calendar() {
         open={openCreateEvent}
         setOpen={setOpenCreateEvent}
         defaultValues={defaultAddEventValues}
+        onCreateEvent={handleCreateEvent}
       />
     </LocalizationProvider>
   );

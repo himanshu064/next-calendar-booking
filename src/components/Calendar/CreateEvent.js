@@ -1,13 +1,8 @@
 import React, { useEffect } from "react";
-import dayjs from "dayjs";
 import Modal from "../Modal";
 import {
   Autocomplete,
-  Typography,
-  Box,
   Button,
-  DialogActions,
-  DialogContentText,
   FormControl,
   FormLabel,
   TextField,
@@ -18,13 +13,26 @@ import {
 import Grid from "@mui/material/Unstable_Grid2";
 import { MobileDateTimePicker } from "@mui/x-date-pickers";
 import { KeyboardBackspace } from "@mui/icons-material";
-import timezones from "./timezones";
-import { getBrowserTimezone } from "./helper";
+import timezones, { extractTimezoneOffsets } from "./timezones";
+import { getBrowserTimezone, getBrowserTimezoneOffset } from "./helper";
 
-const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
+const browserTimezoneOffset = {
+  id: "browser",
+  label: "Browser",
+  offset: getBrowserTimezoneOffset(),
+};
+
+const browserTimezone = getBrowserTimezone();
+
+const CreateEvent = ({
+  open,
+  setOpen,
+  defaultValues = {},
+  onCreateEvent = () => {},
+}) => {
   const formRef = React.useRef(null);
   const [eventTitle, setEventTitle] = React.useState("");
-  const [timezone, setTimezone] = React.useState(getBrowserTimezone());
+  const [timezone, setTimezone] = React.useState(null);
   const [eventType, setEventType] = React.useState("single");
   const [fromDate, setFromDate] = React.useState(null);
   const [toDate, setToDate] = React.useState(null);
@@ -43,7 +51,7 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
+    onCreateEvent({
       eventTitle,
       timezone,
       eventType,
@@ -69,7 +77,7 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
             variant="contained"
             onClick={() => {
               formRef.current.dispatchEvent(
-                new Event("submit", { cancelable: true })
+                new Event("submit", { cancelable: true, bubbles: true })
               );
             }}
             endIcon={
@@ -83,13 +91,7 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
         </>
       }
     >
-      <form
-        // onSubmit={() => {
-        //   alert("Submit");
-        // }}
-        onSubmit={handleSubmit}
-        ref={formRef}
-      >
+      <form onSubmit={handleSubmit} ref={formRef}>
         <Grid container spacing={1}>
           <Grid xs={12} sm={6}>
             <FormControl fullWidth>
@@ -106,26 +108,15 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
             <FormControl fullWidth>
               <FormLabel>Timezone</FormLabel>
               <Autocomplete
-                onKeyDown={(event) => {
-                  if (event.key === "Tab") {
-                    if (hint.current) {
-                      setInputValue(hint.current);
-                      event.preventDefault();
-                    }
-                  }
-                }}
                 disablePortal
-                options={timezones.map((tz) => ({ label: tz, id: tz }))}
+                options={timezones.map((tz) => ({
+                  label: tz,
+                  id: tz,
+                  offset: extractTimezoneOffsets(tz),
+                }))}
+                onChange={(_, value) => setTimezone(value)}
                 renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      onChange={(e) => {
-                        const newValue = e.target.value;
-                        setTimezone(newValue);
-                      }}
-                    />
-                  );
+                  return <TextField {...params} />;
                 }}
               />
             </FormControl>
@@ -139,7 +130,7 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
                 aria-labelledby="event-type"
                 name="event-type-group"
                 value={
-                  eventType === "single" || eventType === "reccuring"
+                  eventType === "single" || eventType === "recurring"
                     ? eventType
                     : "single"
                 }
@@ -151,9 +142,9 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
                   label="Single"
                 />
                 <FormControlLabel
-                  value="reccuring"
+                  value="recurring"
                   control={<Radio />}
-                  label="Reccuring"
+                  label="Recurring"
                 />
               </RadioGroup>
             </FormControl>
@@ -178,6 +169,8 @@ const CreateEvent = ({ open, setOpen, defaultValues = {} }) => {
             </FormControl>
           </Grid>
         </Grid>
+        {/* Hidden submit button to ensure Enter key works */}
+        <button type="submit" style={{ display: "none" }} />
       </form>
     </Modal>
   );

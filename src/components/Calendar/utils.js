@@ -31,7 +31,7 @@ export const HEADER_TOOLBAR = {
   right: "customMonth,customWeek,customDay",
 };
 
-export const INITIAL_VIEW = "dayGridMonth";
+export const INITIAL_VIEW = "timeGridWeek";
 
 export const VIEWS = {
   dayGrid: {
@@ -63,3 +63,5 @@ export const VIEWS = {
     titleFormat: { year: "numeric" },
   },
 };
+
+export const defaultIntervalInMinutes = 60;
