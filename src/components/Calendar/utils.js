@@ -23,13 +23,15 @@ export const BUTTON_TEXT = {
   prevYear: "Prev Year",
 };
 
-export const HEADER_TOOLBAR = {
-  // left: "prev,next today",
-  left: "prevBtn,nextBtn customToday",
-  center: "title",
-  // right: "timeGridDay,timeGridWeek,dayGridMonth",
-  right: "customMonth,customWeek,customDay",
-};
+// export const HEADER_TOOLBAR = {
+//   // left: "prev,next today",
+//   left: "prevBtn,nextBtn customToday",
+//   center: "title",
+//   // right: "timeGridDay,timeGridWeek,dayGridMonth",
+//   right: "customMonth,customWeek,customDay",
+// };
+
+export const HEADER_TOOLBAR = null;
 
 export const INITIAL_VIEW = "timeGridWeek";
 

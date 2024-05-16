@@ -26,6 +26,7 @@ import renderEventContent from "./methods/renderEventContent";
 import { useEventContext } from "@/context";
 import EditEvent from "./EditEvent";
 import { setLocalStorage } from "@/lib/localStorage";
+import Header from "./methods/Header";
 
 function Calendar() {
   const { events } = useEventContext();
@@ -273,6 +274,7 @@ function Calendar() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Header ref={fullCalendarRef} />
       <FullCalendar
         ref={fullCalendarRef}
         plugins={PLUGINS}
