@@ -10,7 +10,7 @@ const defaultEvents = [
     title: "Meeting",
     start: new Date(),
     end: dayjs(new Date()).add(2, "hours").toDate(),
-    color: "red",
+    color: "#ff0000",
     textColor: "white",
     extendedProps: {
       id: createId(),
@@ -21,6 +21,7 @@ const defaultEvents = [
 
 const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
 
   useEffect(() => {
     const storedEvents = getLocalStorage("events");
@@ -33,7 +34,9 @@ const EventProvider = ({ children }) => {
   }, []);
 
   return (
-    <EventContext.Provider value={{ events, setEvents }}>
+    <EventContext.Provider
+      value={{ events, setEvents, filteredEvents, setFilteredEvents }}
+    >
       {children}
     </EventContext.Provider>
   );

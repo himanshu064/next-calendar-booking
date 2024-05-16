@@ -4,9 +4,11 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import DayIcon from "@/icons/DayIcon";
+import ColorFilters from "./ColorFilters";
 
 const Header = (props, ref) => {
   const calendarApi = ref.current?.calendar;
+  console.log(ref?.current, "ref curret");
 
   const goToToday = () => calendarApi?.today?.();
   const gotToPrev = () => calendarApi?.prev?.();
@@ -34,66 +36,74 @@ const Header = (props, ref) => {
           </Typography>
         </Box>
         <Box>
-          <Tooltip title="Today">
-            <IconButton
-              onClick={goToToday}
-              sx={{ height: "40px", width: "40px" }}
-            >
-              <img
-                src="https://static.vecteezy.com/system/resources/previews/007/879/777/large_2x/today-icon-style-free-vector.jpg"
-                className="h-full w-full"
-              />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Previous">
-            <IconButton onClick={gotToPrev}>
-              <ArrowBackIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Next">
-            <IconButton onClick={gotToNext}>
-              <ArrowForwardIcon />
-            </IconButton>
-          </Tooltip>
+          <Box>
+            <Tooltip title="Today">
+              <IconButton
+                onClick={goToToday}
+                sx={{ height: "40px", width: "40px" }}
+              >
+                <img
+                  src="https://static.vecteezy.com/system/resources/previews/007/879/777/large_2x/today-icon-style-free-vector.jpg"
+                  className="h-full w-full"
+                />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Previous">
+              <IconButton onClick={gotToPrev}>
+                <ArrowBackIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Next">
+              <IconButton onClick={gotToNext}>
+                <ArrowForwardIcon />
+              </IconButton>
+            </Tooltip>
 
-          <Tooltip title="Month View">
-            <IconButton
-              sx={{
-                height: "40px",
-                width: "40px",
-              }}
-              onClick={() => handleViewChange("dayGridMonth")}
-            >
-              <CalendarMonthIcon
-                fontSize="medium"
-                sx={{ color: "black", margin: "6px" }}
-              />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Month View">
+              <IconButton
+                sx={{
+                  height: "40px",
+                  width: "40px",
+                }}
+                onClick={() => handleViewChange("dayGridMonth")}
+              >
+                <CalendarMonthIcon
+                  fontSize="medium"
+                  sx={{ color: "black", margin: "6px" }}
+                />
+              </IconButton>
+            </Tooltip>
 
-          <Tooltip title="Day View">
-            <IconButton
-              sx={{
-                height: "40px",
-                width: "40px",
-              }}
-              onClick={() => handleViewChange("timeGridDay")}
-            >
-              <DayIcon />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Day View">
+              <IconButton
+                sx={{
+                  height: "40px",
+                  width: "40px",
+                }}
+                onClick={() => handleViewChange("timeGridDay")}
+              >
+                <DayIcon />
+              </IconButton>
+            </Tooltip>
 
-          <Tooltip title="Week View">
-            <IconButton
-              sx={{
-                height: "40px",
-                width: "40px",
-              }}
-              onClick={() => handleViewChange("timeGridWeek")}
-            >
-              <img src="/week.png" className="h-full w-full" alt="Month View" />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Week View">
+              <IconButton
+                sx={{
+                  height: "40px",
+                  width: "40px",
+                }}
+                onClick={() => handleViewChange("timeGridWeek")}
+              >
+                <img
+                  src="/week.png"
+                  className="h-full w-full"
+                  alt="Month View"
+                />
+              </IconButton>
+            </Tooltip>
+          </Box>
+
+          <ColorFilters />
         </Box>
       </Stack>
     </div>

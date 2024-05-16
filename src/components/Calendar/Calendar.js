@@ -29,7 +29,7 @@ import { setLocalStorage } from "@/lib/localStorage";
 import Header from "./methods/Header";
 
 function Calendar() {
-  const { events } = useEventContext();
+  const { events, filteredEvents } = useEventContext();
   const fullCalendarRef = useRef(null);
   const [currentEvents, setCurrentEvents] = useState([]);
 
@@ -271,6 +271,7 @@ function Calendar() {
   }
 
   console.log(currentEvents, "currentEvents");
+  console.log(filteredEvents, "filtered Events");
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -280,7 +281,7 @@ function Calendar() {
         plugins={PLUGINS}
         initialView={INITIAL_VIEW}
         weekends
-        events={events}
+        events={filteredEvents.length > 0 ? filteredEvents : events}
         eventContent={renderEventContent}
         headerToolbar={HEADER_TOOLBAR}
         buttonText={BUTTON_TEXT}
