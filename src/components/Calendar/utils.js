@@ -2,12 +2,14 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
+import rrulePlugin from "@fullcalendar/rrule";
 
 export const PLUGINS = [
   interactionPlugin,
   dayGridPlugin,
   timeGridPlugin,
   listPlugin,
+  rrulePlugin,
 ];
 
 export const BUTTON_TEXT = {
